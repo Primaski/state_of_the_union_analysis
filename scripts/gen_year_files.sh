@@ -24,6 +24,16 @@ FP_csv="${DIR_transcripts}/SOTUT.csv"
 first_year=0
 curr_year=0
 
+if find "${DIR_transcripts}/years" -maxdepth 1 -name "*.txt" | grep -q .; then
+	echo "[$(basename "$0")]: Files already exist in the years directory. Regenerate files? (y/n)"
+	read response
+	if [[ "$response" != "y" && "$response" != "Y" ]]; then
+		exit 0
+	fi
+fi
+
+#------------------------
+
 echo "[$(basename "$0")]: Working..."
 # Each year's transcript is printed on a distinct line. We will first ensure that the line conforms to the expected regex.
 while IFS= read -r address; do
