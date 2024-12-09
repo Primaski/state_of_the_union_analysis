@@ -3,6 +3,8 @@
 # This script receives the path to the transcripts directory as an argument.
 # This script will utilize a raw CSV file containing all of the State of the Union addresses, and organizes them into a directory. Each address will be saved in a separate file, named by the year of the address, and populated with its respective transcript. The intent is to make the process of working on the data cleaner and more streamlined.
 
+# DOES NOT CURRENTLY WORK, NEED TO FIX THE REGEX OR SED. FILE IS NOT OUTPUTTED CLEAN
+
 # Modify as needed
 STOP=0 # if 1, generates only the first file - for testing purposes
 regex="^(.+),(.+),.*,\"\[(.*)\]\""
@@ -46,7 +48,7 @@ while IFS= read -r address; do
 		[ $first_year -eq 0 ] && first_year=$year #for end reporting	
 		
 		#The file will be named with the year, and the contents will have the name of the president, followed by a new line with the raw transcript.
-		echo -e "<<$president>>\n${speech}" > "$DIR_transcripts/years/${year}_raw.txt"
+		echo -e "<<$president>>\n${speech}" > "$DIR_transcripts/years/${year}.txt"
 	else
 		echo "[$(basename "$0")]: Fatal error: Address beginning with \"${address:0:100}...\" had an unexpected format."
 		exit 1
