@@ -3,8 +3,6 @@
 # This script receives the path to the transcripts directory as an argument.
 # This script will utilize a raw CSV file containing all of the State of the Union addresses, and organizes them into a directory. Each address will be saved in a separate file, named by the year of the address, and populated with its respective transcript. The intent is to make the process of working on the data cleaner and more streamlined.
 
-# DOES NOT CURRENTLY WORK, NEED TO FIX THE REGEX OR SED. FILE IS NOT OUTPUTTED CLEAN
-
 # Modify as needed
 STOP=0 # if 1, generates only the first file - for testing purposes
 regex="^(.+),(.+),.*,\"\[(.*)\]\""
@@ -26,7 +24,7 @@ FP_csv="${DIR_transcripts}/SOTUT.csv"
 first_year=0
 curr_year=0
 
-if find "${DIR_transcripts}/years" -maxdepth 1 -name "*.txt" | grep -q .; then
+if find "${DIR_transcripts}/raw" -maxdepth 1 -name "*.txt" | grep -q .; then
 	echo "[$(basename "$0")]: Files already exist in the years directory. Regenerate files? (y/n)"
 	read response
 	if [[ "$response" != "y" && "$response" != "Y" ]]; then
@@ -48,7 +46,7 @@ while IFS= read -r address; do
 		[ $first_year -eq 0 ] && first_year=$year #for end reporting	
 		
 		#The file will be named with the year, and the contents will have the name of the president, followed by a new line with the raw transcript.
-		echo -e "<<$president>>\n${speech}" > "$DIR_transcripts/years/${year}.txt"
+		echo -e "<<$president>>\n${speech}" > "$DIR_transcripts/raw/${year}.txt"
 	else
 		echo "[$(basename "$0")]: Fatal error: Address beginning with \"${address:0:100}...\" had an unexpected format."
 		exit 1

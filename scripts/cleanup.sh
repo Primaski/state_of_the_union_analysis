@@ -3,12 +3,12 @@
 #! The purpose of this script is to preprocess the raw data. It will require the transcripts/years/ directory to be populated.
 
 # Modify as needed
-STOP=1 # for testing purposes, only does it on the first file. 
+STOP=0 # for testing purposes, only does it on the first file. 
 
 # Do not modify beyond here
 
 # Ensuring we have the files to work with
-if [ ! -d "${1}/years" ]; then
+if [ ! -d "${1}/raw" ]; then
 	echo "[$(basename "$0")]: Fatal error: Did not receive a working directory as an argument. Make sure to pass in the path to the transcripts directory, and that there is a years subdirectory."
 	exit 1
 fi
@@ -16,30 +16,34 @@ fi
 # Grab the text files, ensure they exist
 
 DIR_transcripts=$1
-DIR_years="${DIR_transcripts}/years"
-year_files=(${DIR_years}/*.txt)
+DIR_raw="${DIR_transcripts}/raw"
+raw_files=(${DIR_raw}/*.txt)
 first_year=0
 curr_year=0
 
-if [ "${year_files[0]}" == "${DIR_years}/*.txt" ]; then
+if [ "${raw_files[0]}" == "${DIR_raw}/*.txt" ]; then
 	# If equal, there was no glob expansion (no text files), and the string literal is preserved.
 	echo "[$(basename "$0")]: Fatal error: The years directory must contain at least one text file."
 	exit 1
 fi
 
-for file in $year_files; do
+echo "[$(basename "$0")]: Working..."
+
+for file in "${raw_files[@]}"; do
 	if [[ ! "$file" =~ [0-9]{4}\.txt ]]; then
-	       continue
+		continue
        fi
-       
        filename=$(basename "$file" .txt)
        [ $first_year -eq 0 ] && first_year=$filename
        curr_year=$filename
-       
        # The following command translates all characters to lowercase, and then removes extraneous characters. We preserve apostrophes, but only when they appear intraword. Since sed does not support negative lookahead or lookbehind, I simply converted acceptable apostrophes to tildes, then deleted all apostrophes, and switched tildes back to apostrophes.
        
        # preprocessing
-       tr 'A-Z' 'a-z' < "$file" | sed 's/[][,#+=:;\/\?\‑\–\—\‘\’\“\”\°\`\|\~\£\$\&\"\.\(\)\*\%\-]//g' | sed -E "s/([A-Za-z])'([A-Za-z])/\1~\2/g" | sed "s/'//g" | sed "s/~/'/g" > "$DIR_years/${filename}_clean.txt"
+       tr 'A-Z' 'a-z' < "$file" | \
+	       sed 's/[][,#+=:;\/\?\‑\–\—\‘\’\“\”\°\`\|\~\£\$\&\"\.\(\)\*\%\-]//g' | \
+	       sed -E "s/([A-Za-z])'([A-Za-z])/\1~\2/g" | \
+	       sed "s/'//g" | \
+	       sed "s/~/'/g" > "$DIR_transcripts/clean/${filename}.txt"
 
 	if [[ STOP -eq 1 ]]; then
 		break
