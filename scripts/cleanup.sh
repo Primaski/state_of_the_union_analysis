@@ -3,12 +3,15 @@
 #! The purpose of this script is to preprocess the raw data. It will require the transcripts/years/ directory to be populated.
 
 # Modify below as needed
-chars_to_remove="!\"\\#%&'()[]*+,:;./=?-_\`|~°¸‑–—‘’“”…$£бЅјў�"
+#chars_to_remove="\"#%&'()[]*+,:;./=?-_\`|~°¸‑–—‘’“”…$£бЅјў�"
+#stop_chars="\"#%&'()[]*+,:;./=?-_\`|~°–—‘’“”…$£"
+
 # I used `egrep -o "[^A-Za-z0-9]' SOTUT.csv | sort | uniq` to determine all non alphabetic and numerical characters used in the speech.
 STOP=1 # for testing purposes, only does it on the first file. 
 
 
 # Do not modify beyond here
+
 
 # Ensuring we have the files to work with
 if [ ! -d "${1}/years" ]; then
@@ -29,8 +32,12 @@ if [ "${year_files[0]}" == "${DIR_years}/*.txt" ]; then
 fi
 
 for file in $year_files; do
+	if [[ ! "$file" =~ [0-9]{4}\.txt ]]; then
+	       continue 
+       fi	       
 	echo "Working on file $(basename "$file")"
-	sed 's/${chars_to_remove}//g' "$file" > "$DIR_years/$(basename "$file" .txt)_clean.txt"
+	#sed "s/[$stop_chars]//g" "$file" > "$DIR_years/$(basename "$file" .txt)_clean.txt"
+	sed 's/[^a-zA-Z0-9[:space:]]//g' "$file" > "$DIR_years/$(basename "$file" .txt)_clean.txt"
 	if [[ STOP -eq 1 ]]; then
 		break
 	fi
