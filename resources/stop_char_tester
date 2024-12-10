@@ -1,0 +1,30 @@
+# This file exists solely to test the functionality of cleanup.sh. Its intended use is to ensure a sed command is working correctly. 
+# This list was curtailed to extraneous characters found in the transcript files, using `egrep -o "[^A-Za-z0-9]" SOTUT.csv | sort | uniq`.
+
+STOP CHAR TESTER
+[] {brackets}
+... {periods}
+() {parens}
+,,, {commas}
+# {hashes}
+< > {arrows}
++ {plus}
+- {minus}
+* {times}
+/ {divided by}
+\ {backslash}
+% {percent}
+& {ampersand}
+' {single quote}
+" {double quote}
+:; {colon and semi}
+= {equals}
+? {question}
+$£ {monetary symbols}
+| {or}
+~ {tilde}
+` {code bracket}
+° {degree}
+* {asterisk}
+- ‑ – — {dashes}
+‘ ’ “ ” {other quotes}
