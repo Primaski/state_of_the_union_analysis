@@ -24,13 +24,18 @@ FP_csv="${DIR_transcripts}/SOTUT.csv"
 first_year=0
 curr_year=0
 
+# Create output directory if does not exist
+[[ -d "${DIR_transcripts}/raw" ]] || mkdir -p "${DIR_transcripts}/raw"
+
 if find "${DIR_transcripts}/raw" -maxdepth 1 -name "*.txt" | grep -q .; then
-	echo "[$(basename "$0")]: Files already exist in the years directory. Regenerate files? (y/n)"
+	echo "[$(basename "$0")]: Files already exist in the raw directory. Regenerate files? (y/n)"
 	read response
 	if [[ "$response" != "y" && "$response" != "Y" ]]; then
 		exit 0
 	fi
 fi
+
+
 
 #------------------------
 
