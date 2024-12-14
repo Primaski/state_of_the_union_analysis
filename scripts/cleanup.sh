@@ -4,6 +4,7 @@
 
 # Modify as needed
 STOP=0 # for testing purposes, only does it on the first file. 
+loading_updates=50 # after how many files have been processed do we report to the console
 
 # ----------------
 script_name=$(basename "$0")
@@ -41,6 +42,7 @@ fi
 
 echo "[${script_name}]: Working..."
 
+count=0
 for file in "${raw_files[@]}"; do
 	if [[ ! "$file" =~ [0-9]{4}\.txt ]]; then
 		continue
@@ -48,6 +50,8 @@ for file in "${raw_files[@]}"; do
        filename=$(basename "$file" .txt)
        [ $first_year -eq 0 ] && first_year=$filename
        curr_year=$filename
+       (( count % loading_updates == 0 )) && echo "[${script_name}]: Still working... currently on $curr_year"
+		(( count++ )) 
        # The following command translates all characters to lowercase, and then removes extraneous characters. We preserve apostrophes and dashes, but only when they appear intraword. 
        # Since sed does not support negative lookahead or lookbehind, I simply converted acceptable characters to placeholders, then deleted all unacceptable ones, then switched the placeholders back.
        # Note: Many pairs of words had unnecessary hyphens in them due to imperfect data (for example: need-to, look-away). They will simply be separated with spaces. There were also many unreadable characters, so I narrowed it down to ASCII.

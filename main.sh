@@ -11,11 +11,11 @@ echo "Installing spacy (if needed), please wait..."
 #----------- Execute scripts sequentially ------------
 
 # Step 1 - Split the document containing all the transcripts into year-by-year text files
-${DIR}/scripts/gen_raw_files.sh "${DIR}/transcripts/SOTUT.csv" "${DIR}/transcripts/raw"
+${DIR}/scripts/gen_raw_files.sh "${DIR}/SOTUT.csv" "${DIR}/processing/raw"
 # Step 2 - Preprocess all the files in the directory
-${DIR}/scripts/cleanup.sh "${DIR}/transcripts/raw" "${DIR}/transcripts/clean"
+${DIR}/scripts/cleanup.sh "${DIR}/processing/raw" "${DIR}/processing/clean"
 # Step 3 - Lemmatize the preprocessed files
-python3 ${DIR}/scripts/lemmatize.py "${DIR}/transcripts/clean" "${DIR}/transcripts/lemma" # not finished
+python3 ${DIR}/scripts/lemmatize.py "${DIR}/processing/clean" "${DIR}/processing/lemma"
 # Step 4 - Create a CSV table that describes lemma frequencies 
-[[ -d "${DIR}/transcripts/freq" ]] || mkdir -p "${DIR}/transcripts/freq"
-# ${DIR}/scripts/wordfreq.sh "${DIR}/transcripts/lemma" "${DIR}/transcripts/freq" "${DIR}/resources/stopwords" #not finished
+[[ -d "${DIR}/processing/freq" ]] || mkdir -p "${DIR}/processing/freq"
+${DIR}/scripts/wordfreq.sh "${DIR}/processing/lemma" "${DIR}/processing/freq" ABC "${DIR}/resources/stopwords"

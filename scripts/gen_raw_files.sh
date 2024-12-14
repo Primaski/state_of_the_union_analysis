@@ -4,7 +4,7 @@
 # This script will utilize a raw CSV file containing all of the State of the Union addresses, and organizes them into a directory. Each address will be saved in a separate file, named by the year of the address, and populated with its respective transcript. The intent is to make the process of working on the data cleaner and more streamlined.
 
 # Modify as needed
-STOP=0 # if 1, generates only the first file - for testing purposes
+loading_updates=50 # after how many files have been processed should an update be sent to the console
 regex="^(.+),(.+),.*,\"\[(.*)\]\""
 
 # ----------------
@@ -42,23 +42,24 @@ fi
 
 echo "[${script_name}]: Working..."
 # Each year's transcript is printed on a distinct line. We will first ensure that the line conforms to the expected regex.
+count=0
 while IFS= read -r address; do
 	if [[ ${address} =~ ${regex} ]]; then
 		# If we reach here, then the regex is working on the current line. Let's divide each column. The regular expression should have three capture groups.
 		president="${BASH_REMATCH[1]}"
 		year="${BASH_REMATCH[2]}"
 		speech="${BASH_REMATCH[3]}"
-		curr_year=$year #for end reporting
+
+		# for reporting purposes
+		curr_year=$year
 		[ $first_year -eq 0 ] && first_year=$year #for end reporting	
-		
-		#The file will be named with the year, and the contents will have the name of the president, followed by a new line with the raw transcript.
+
+		(( count % loading_updates == 0 )) && echo "[${script_name}]: Still working... currently on $curr_year"
+		(( count++ )) 	
 		echo -e "<<$president>>\n${speech}" > ${DIR_output}/${year}.txt
 	else
 		echo "[${script_name}]: Address beginning with \"${address:0:100}...\" had an unexpected format. Terminating."
 		exit 1
-	fi
-	if [[ STOP -eq 1 ]]; then
-		break
 	fi
 done < <(tail -n +2 $input)
 
