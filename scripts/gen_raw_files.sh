@@ -1,5 +1,5 @@
 #!/bin/bash
-# gen_year_files.sh
+# gen_raw_files.sh
 # This script receives the path to the transcripts directory as an argument.
 # This script will utilize a raw CSV file containing all of the State of the Union addresses, and organizes them into a directory. Each address will be saved in a separate file, named by the year of the address, and populated with its respective transcript. The intent is to make the process of working on the data cleaner and more streamlined.
 
@@ -7,28 +7,30 @@
 STOP=0 # if 1, generates only the first file - for testing purposes
 regex="^(.+),(.+),.*,\"\[(.*)\]\""
 
-
+# ----------------
+script_name=$(basename "$0")
 # Ensuring we have the files to work with
-if [ ! -d "$1" ]; then
-	echo "[$(basename "$0")]: Fatal error: Did not receive a working directory as an argument."
+if [ ! -f "$1" ] || [ $# -ne 2 ]; then
+	echo "[${script_name}]: Did not receive a working input file and an output directory as arguments. Terminating."
 	exit 1
 fi
 
-if [ ! -f "$1/SOTUT.csv" ]; then
-	echo "[$(basename "$0")]: Fatal error: Transcript CSV file not found."
+input="$1"
+DIR_output="$2"
+
+if [ ! -f "${input}" ]; then
+	echo "[${script_name}]: Transcript CSV file not found. Terminating."
 	exit 1
 fi
 
-DIR_transcripts="$1"
-FP_csv="${DIR_transcripts}/SOTUT.csv"
 first_year=0
 curr_year=0
 
 # Create output directory if does not exist
-[[ -d "${DIR_transcripts}/raw" ]] || mkdir -p "${DIR_transcripts}/raw"
+[[ -d "${DIR_output}" ]] || mkdir -p "${DIR_output}"
 
-if find "${DIR_transcripts}/raw" -maxdepth 1 -name "*.txt" | grep -q .; then
-	echo "[$(basename "$0")]: Files already exist in the raw directory. Regenerate files? (y/n)"
+if find "${DIR_output}" -maxdepth 1 -name "*.txt" | grep -q .; then
+	echo "[${script_name}]: Files already exist in the raw directory. Regenerate files? (y/n)"
 	read response
 	if [[ "$response" != "y" && "$response" != "Y" ]]; then
 		exit 0
@@ -36,10 +38,9 @@ if find "${DIR_transcripts}/raw" -maxdepth 1 -name "*.txt" | grep -q .; then
 fi
 
 
-
 #------------------------
 
-echo "[$(basename "$0")]: Working..."
+echo "[${script_name}]: Working..."
 # Each year's transcript is printed on a distinct line. We will first ensure that the line conforms to the expected regex.
 while IFS= read -r address; do
 	if [[ ${address} =~ ${regex} ]]; then
@@ -51,15 +52,15 @@ while IFS= read -r address; do
 		[ $first_year -eq 0 ] && first_year=$year #for end reporting	
 		
 		#The file will be named with the year, and the contents will have the name of the president, followed by a new line with the raw transcript.
-		echo -e "<<$president>>\n${speech}" > "$DIR_transcripts/raw/${year}.txt"
+		echo -e "<<$president>>\n${speech}" > ${DIR_output}/${year}.txt
 	else
-		echo "[$(basename "$0")]: Fatal error: Address beginning with \"${address:0:100}...\" had an unexpected format."
+		echo "[${script_name}]: Address beginning with \"${address:0:100}...\" had an unexpected format. Terminating."
 		exit 1
 	fi
 	if [[ STOP -eq 1 ]]; then
 		break
 	fi
-done < <(tail -n +2 $FP_csv)
+done < <(tail -n +2 $input)
 
-echo "[$(basename "$0")]: Successfully generated raw transcript files for years ${first_year} through ${curr_year}."
+echo "[${script_name}]: Successfully generated raw transcript files for years ${first_year} through ${curr_year}."
 

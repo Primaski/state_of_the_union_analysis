@@ -8,7 +8,7 @@
 
 # WORK IN PROGRESS, NOT DONE
 
-# Do not modify
+script_name=$(basename "$0")
 input_filepath=""
 DIR_input=""
 DIR_output=""
@@ -19,12 +19,12 @@ if [[ -f "$1" ]]; then
 elif [[ -d "$1" ]]; then
 	DIR_input="$1"
 else
-	echo "[$(basename "$0")]: Fatal error: Did not receive a working input directory or file as the first argument."
+	echo "[${script_name}]: Did not receive a working input directory or file as the first argument."
 	exit 1
 fi
 
 if [[ ! -d "$2" ]]; then
-	echo "[$(basename "$0")]: Fatal error: Did not receive a working output directory as the second argument."
+	echo "[${script_name}]: Did not receive a working output directory as the second argument. Terminating."
 else
 	DIR_output="$2"
 fi
@@ -34,7 +34,7 @@ if [[ $# -gt 2 ]]; then
 	if [[ -f "$3" ]]; then
 		stop_words_filepath="$3"
 	else
-		echo "[$(basename "$0")]: Fatal error: $3 is not a valid filepath to a stop words file."
+		echo "[${script_name}]:$3 is not a valid filepath to a stop words file. Terminating."
 		exit 1
 	fi
 fi
