@@ -19,3 +19,5 @@ python3 ${DIR}/scripts/lemmatize.py "${DIR}/processing/clean" "${DIR}/processing
 # Step 4 - Create a CSV table that describes lemma frequencies 
 [[ -d "${DIR}/processing/freq" ]] || mkdir -p "${DIR}/processing/freq"
 ${DIR}/scripts/wordfreq.sh "${DIR}/processing/lemma" "${DIR}/processing/freq" ABC "${DIR}/resources/stopwords"
+# Step 5 - Here's the fun part - our first finding! Let's collapse all of the frequency files into one, so that we can have a master list of every word said in every State of the Union address, along with their frequency counts.
+${DIR}/scripts/gen_master_wordlist.sh "${DIR}/processing/freq" "${DIR}/findings"
