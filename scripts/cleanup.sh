@@ -55,7 +55,9 @@ for file in "${raw_files[@]}"; do
        # The following command translates all characters to lowercase, and then removes extraneous characters. We preserve apostrophes and dashes, but only when they appear intraword. 
        # Since sed does not support negative lookahead or lookbehind, I simply converted acceptable characters to placeholders, then deleted all unacceptable ones, then switched the placeholders back.
        # Note: Many pairs of words had unnecessary hyphens in them due to imperfect data (for example: need-to, look-away). They will simply be separated with spaces. There were also many unreadable characters, so I narrowed it down to ASCII.
-       tr -s 'A-Z' 'a-z' < "$file" | \
+       tr 'A-Z' 'a-z' < "$file" | \
+	       tr -s " " | \
+	       sed 's/<<[^>]*>>//g' | \
 	       sed -E "s/([A-Za-z])—([A-Za-z])/\1 \2/g" | \
 	       sed -E "s/([A-Za-z])-([A-Za-z])/\1 \2/g" | \
 	       sed -E "s/([A-Za-z])—([A-Za-z])/\1 \2/g" | \

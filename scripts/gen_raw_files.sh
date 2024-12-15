@@ -23,8 +23,8 @@ if [ ! -f "${input}" ]; then
 	exit 1
 fi
 
-first_year=0
-curr_year=0
+first_year="0"
+curr_year="0"
 
 # Create output directory if does not exist
 [[ -d "${DIR_output}" ]] || mkdir -p "${DIR_output}"
@@ -52,7 +52,7 @@ while IFS= read -r address; do
 
 		# for reporting purposes
 		curr_year=$year
-		[ $first_year -eq 0 ] && first_year=$year #for end reporting	
+		[ $first_year == "0" ] && first_year=$year #for end reporting	
 
 		(( count % loading_updates == 0 )) && echo "[${script_name}]: Still working... currently on $curr_year"
 		(( count++ )) 	

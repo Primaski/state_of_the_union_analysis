@@ -7,8 +7,8 @@
 # Argument 2: Output destination for the wordlist (one file)
 # Argument 3 (not implemented yet): Sorting order. ABC to sort alphabetically, FREQ to do so by frequency.
 
-loading_updates=100 # after how many OPERATIONS have been processed do we report to the console. make sure this number is huge, or else prepare for the great flood
-output_filename="master_wordlist.txt"
+loading_updates=300 # after how many OPERATIONS have been processed do we report to the console. make sure this number is huge, or else prepare for the great flood
+output_filename="master_wordlist_alphabetized.tsv"
 
 # ----------------
 script_name=$(basename "$0")
