@@ -4,5 +4,8 @@ processing/clean/*.txt
 processing/lemma/*.txt
 processing/freq/*.tsv
 
+$ Ignores Jupyter Notebook checkpoints
+scripts/.ipynb_checkpoints
+
 # Ignores temp folder
 .temp/*
