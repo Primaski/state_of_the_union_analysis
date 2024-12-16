@@ -44,11 +44,11 @@ echo "[${script_name}]: Working..."
 
 count=0
 for file in "${raw_files[@]}"; do
-	if [[ ! "$file" =~ [0-9]{4}\.txt ]]; then
+	if [[ ! "$file" =~ [0-9]{4}-?[0-9]?\.txt ]]; then
 		continue
        fi
        filename=$(basename "$file" .txt)
-       [ $first_year -eq 0 ] && first_year=$filename
+       [ $first_year == 0 ] && first_year=$filename
        curr_year=$filename
        (( count % loading_updates == 0 )) && echo "[${script_name}]: Still working... currently on $curr_year"
 		(( count++ )) 

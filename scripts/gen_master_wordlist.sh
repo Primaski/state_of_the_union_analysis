@@ -33,13 +33,13 @@ fi
 
 [[ -d "$DIR_output" ]] || mkdir -p "$DIR_output"
 
-if find "$DIR_output" -maxdepth 1 -name "${output_filename}" | grep -q .; then
+if [[ -f "${DIR_output}/${output_filename}" ]]; then
 	echo "[${script_name}]: Master wordlist already exists in this directory. Regenerate? This will take a long time, really! (y/n)"
 	read response
 	if [[ "$response" != "y" && "$response" != "Y" ]]; then
 		exit 0
 	else
-		rm "${DIR_output}/${output_filename}" # won't be overwritten
+		mv --backup=t "${DIR_output}/${output_filename}" "${DIR_output}/${output_filename}_old" # won't be overwritten
 	fi
 fi
 

@@ -21,3 +21,7 @@ python3 ${DIR}/scripts/lemmatize.py "${DIR}/processing/clean" "${DIR}/processing
 ${DIR}/scripts/wordfreq.sh "${DIR}/processing/lemma" "${DIR}/processing/freq" ABC "${DIR}/resources/stopwords"
 # Step 5 - Here's the fun part - our first finding! Let's collapse all of the frequency files into one, so that we can have a master list of every word said in every State of the Union address, along with their frequency counts.
 ${DIR}/scripts/gen_master_wordlist.sh "${DIR}/processing/freq" "${DIR}/findings"
+# not necessary for now${DIR}/scripts/sort_wordlist_by_freq.sh "${DIR}/findings/master_wordlist_alphabetized.tsv" "${DIR}/findings"
+# Step 6 - Let's turn the entire directory of /freq/ into one big TSV files, so we can determine the counts of ALL of the words across ALL of the addresses
+${DIR}/scripts/gen_wordfreq_chart.sh "${DIR}/processing/freq" "${DIR}/findings/master_wordlist_alphabetized.tsv" "${DIR}/findings"
+
