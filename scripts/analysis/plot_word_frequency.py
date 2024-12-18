@@ -88,7 +88,7 @@ def _plot_word_freq_over_time(word, group_size, save):
     matplot.grid(True)
     matplot.show()
     if(save):
-        figure.savefig(os.path.join(DIR_findings, "images", f"{word}_gs{group_size}.png"))
+        figure.savefig(os.path.join(DIR_findings, "images", f"wordfreq_{word}_{group_size}.png"))
     return True
 
 word=""
@@ -96,7 +96,7 @@ group_size=0
 print(f"\nLine graphs will be automatically generated based on your prompt and exported to {DIR_findings_img}")
 while True:
     if group_size == 0:
-        response = input("How many years should be grouped at each point in the output? The recommendation is 10.\n")
+        response = input("How many years should be grouped at each point in the output? The recommendation is 10 (for aesthetics), or 7 (for divisibility).\n")
         try:
             group_size = int(response)
             if group_size < 1:
@@ -105,9 +105,9 @@ while True:
         except:
             print("Value must be an integer")
             continue    
-    word = input("Which word should I plot? Type quit to quit.")
+    word = input("Which word should I plot? Type quit to quit.\n")
     if word == "quit":
         exit(0)
-    success = _plot_word_freq_over_time(word,10,True)
+    success = _plot_word_freq_over_time(word,group_size,True)
     if(success):
-        print(f"Outputted image to {os.path.join(DIR_findings_img, f"{word}_gs{group_size}.png")}")
+        print(f"Outputted image to {os.path.join(DIR_findings_img, f"wordfreq_{word}_{group_size}.png")}")

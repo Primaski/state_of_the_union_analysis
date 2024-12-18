@@ -1,0 +1,2 @@
+# Note
+This is not indicative of all, but of most nations mentioned during State of the Union addresses. I believe I generated all with ten or more occurrences. Feel free to run /scripts/analysis/plot_word_frequency.py to fill in any gaps.
