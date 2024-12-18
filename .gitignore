@@ -4,8 +4,9 @@ processing/clean/*.txt
 processing/lemma/*.txt
 processing/freq/*.tsv
 
-$ Ignores Jupyter Notebook checkpoints
-scripts/.ipynb_checkpoints
+# Exported the Jupyter Notebook as raw Python files. May not be comprehensive. Message me if you'd like the Jupyter Notebook!
+scripts/analysis/.ipynb_checkpoints
+scripts/analysis/data_analysis.ipynb
 
 # Ignores temp folder
 .temp/*
